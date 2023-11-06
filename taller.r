@@ -62,3 +62,30 @@ fviz_cluster(kmeans, data = df, geom = "point", ellipse.type = "norm", ellipse.l
 fviz_cluster(kmeans, data = df, geom = "point", ellipse.type = "norm", ellipse.level = 0.95) + 
   geom_point(data = as.data.frame(pca$x[,1:2]), aes(x = PC1, y = PC2), color = "red", size = 3) +
   geom_text(data = as.data.frame(pca$x[,1:2]), aes(x = PC1, y = PC2, label = rownames(pca$x)), color = "red", size = 3)
+
+install.packages("cluster")
+library(cluster)
+
+install.packages("fpc")
+library(fpc)
+
+# Metricas de evaluación de k-means
+# Silhouette
+fviz_silhouette(silhouette(kmeans$cluster, dist(df, method = "euclidean")), geom = "segment")
+
+# Nueva agrupacion con 5 grupos
+kmeans2 <- kmeans(df, centers = 5, nstart = 25)
+kmeans2
+
+#Grafico de kmeans2
+fviz_cluster(kmeans2, data = df, geom = "point", ellipse.type = "norm", ellipse.level = 0.95) + 
+  geom_point(data = as.data.frame(pca$x[,1:2]), aes(x = PC1, y = PC2), color = "red", size = 3) +
+  geom_text(data = as.data.frame(pca$x[,1:2]), aes(x = PC1, y = PC2, label = rownames(pca$x)), color = "red", size = 3)
+
+
+# En este caso el resultado muestra como óptimo 4 grupos, 
+# sin embargo, al graficar los datos con las dos primeras componentes principales, 
+# se observa que los grupos no son muy claros, por lo que se decide probar con 5 grupos, 
+# en donde se observa que los grupos son más claros y se puede observar que 
+# los grupos 1 y 2 se encuentran más cercanos entre sí, por lo que se decide 
+# realizar un nuevo análisis con 5 grupos.
