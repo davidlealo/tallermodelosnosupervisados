@@ -25,6 +25,31 @@ summary(pca)
 plot(pca, type = "l")
 abline(h = 0.7, col = "red")
 
-# 4 componentes
-pca <- prcomp(df, scale = TRUE, nstart = 10)
-summary(pca)
+# Suma de variabilidad de datos por componente
+cumsum(pca$sdev^2 / sum(pca$sdev^2))
+
+# Resultado: 
+# 0.3908047 0.6120513 0.7509590 0.8425197 0.9086429 0.9409362 0.9585046
+
+# Pregunta 2
+# Detecte el número optimo de clustering utilizando la información de
+# PCA con la metodología de Elbow y Average silhouette
+install.packages("factoextra")
+library(factoextra)
+
+# Elbow
+fviz_nbclust(df, kmeans, method = "wss") + geom_vline(xintercept = 4, linetype = 2)
+
+# Average silhouette
+fviz_nbclust(df, kmeans, method = "silhouette") + geom_vline(xintercept = 4, linetype = 2)
+
+# Pregunta 3
+# Ajuste un clustering de K-means, utilizando las 2 principales
+# componentes principales gráfique los grupos ajustados, qué puede concluir al respecto?
+
+# K-means
+kmeans <- kmeans(df, centers = 4, nstart = 25)
+kmeans
+
+# Gráfico de grupos
+fviz_cluster(kmeans, data = df, geom = "point", ellipse.type = "norm", ellipse.level = 0.95)
