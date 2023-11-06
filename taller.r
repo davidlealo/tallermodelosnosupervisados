@@ -89,3 +89,42 @@ fviz_cluster(kmeans2, data = df, geom = "point", ellipse.type = "norm", ellipse.
 # en donde se observa que los grupos son más claros y se puede observar que 
 # los grupos 1 y 2 se encuentran más cercanos entre sí, por lo que se decide 
 # realizar un nuevo análisis con 5 grupos.
+
+# Análisis de 5 grupos
+# Silhouette
+fviz_silhouette(silhouette(kmeans2$cluster, dist(df, method = "euclidean")), geom = "segment")
+
+library(fpc)
+kmeans_result <- kmeans(df, centers = 5, nstart = 25)
+
+# Calcula el índice Davies-Bouldin (DB)
+db_index <- cluster.stats(df, kmeans_result$cluster)$db
+
+# Calcula la matriz de distancias
+dist_matrix <- dist(df)
+dist_matrix
+# Calcula el índice Davies-Bouldin (DB)
+db_index <- cluster.stats(dist_matrix, kmeans_result$cluster)$db
+db_index
+
+# Calcula el índice Calinski-Harabasz (CH)
+ch_index <- cluster.stats(dist_matrix, kmeans_result$cluster)$ch
+ch_index
+
+# Calcula el índice Dunn (D)
+dunn_index <- cluster.stats(dist_matrix, kmeans_result$cluster)$dunn
+dunn_index
+
+library(cluster)
+
+# Vector para almacenar los valores de CH
+ch_values <- numeric(7)
+
+# Realiza el análisis de k-means y calcula CH para diferentes valores de k
+for (k in 1:7) {
+  kmeans_result <- kmeans(df, centers = k, nstart = 25)
+  ch_values[k] <- cluster.stats(dist(df, method = "euclidean"), kmeans_result$cluster)$ch
+}
+
+# Imprime los valores de CH para cada valor de k
+print(ch_values)
