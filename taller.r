@@ -12,3 +12,19 @@ head(datos)
 df <- subset(datos, select = -c(y))
 head(df)
 
+
+# Pregunta 1
+# Realice un análisis de componentes principales seleccione la cantidad
+# de componentes que expliquen al menos el 70% de la variabilidad de los datos.
+
+# Realizar PCA
+pca <- prcomp(df, scale = TRUE)
+summary(pca)
+
+# Select number of components
+plot(pca, type = "l")
+abline(h = 0.7, col = "red")
+
+# 4 componentes
+pca <- prcomp(df, scale = TRUE, nstart = 10)
+summary(pca)
