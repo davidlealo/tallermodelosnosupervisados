@@ -47,9 +47,18 @@ fviz_nbclust(df, kmeans, method = "silhouette") + geom_vline(xintercept = 4, lin
 # Ajuste un clustering de K-means, utilizando las 2 principales
 # componentes principales gráfique los grupos ajustados, qué puede concluir al respecto?
 
+# Instalar ggplot2
+install.packages("ggplot2")
+library(ggplot2)
+
 # K-means
 kmeans <- kmeans(df, centers = 4, nstart = 25)
 kmeans
 
 # Gráfico de grupos
 fviz_cluster(kmeans, data = df, geom = "point", ellipse.type = "norm", ellipse.level = 0.95)
+
+# Graficos con centroides
+fviz_cluster(kmeans, data = df, geom = "point", ellipse.type = "norm", ellipse.level = 0.95) + 
+  geom_point(data = as.data.frame(pca$x[,1:2]), aes(x = PC1, y = PC2), color = "red", size = 3) +
+  geom_text(data = as.data.frame(pca$x[,1:2]), aes(x = PC1, y = PC2, label = rownames(pca$x)), color = "red", size = 3)
